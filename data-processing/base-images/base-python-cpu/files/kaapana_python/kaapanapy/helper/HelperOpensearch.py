@@ -1,8 +1,8 @@
 from typing import Dict, List
 
 from kaapanapy.helper import get_opensearch_client
-from kaapanapy.logger import get_logger
 from kaapanapy.settings import OpensearchSettings
+from kaapanapy.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -122,7 +122,7 @@ class DicomTags:
         return _execute_opensearch_query()
 
     def get_dcm_uid_objects(
-        series_instance_uids, include_custom_tag="", exclude_custom_tag="", index=None
+        series_instance_uids, include_custom_tag="", exclude_custom_tag=""
     ):
         index = index if index is not None else HelperOpensearch.index
         # default query for fetching via identifiers
@@ -147,7 +147,7 @@ class DicomTags:
 
         res = self.execute_opensearch_query(
             query=query,
-            index=index,
+            index=HelperOpensearch.index,
             source={
                 "includes": [
                     DicomTags.study_uid_tag,
