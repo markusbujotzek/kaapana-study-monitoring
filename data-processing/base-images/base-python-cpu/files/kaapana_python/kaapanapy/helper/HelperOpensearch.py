@@ -18,8 +18,8 @@ class DicomTags:
 
 
 class HelperOpensearch:
-    def __init__(self):
-        self.os_client = get_opensearch_client()
+    def __init__(self, access_token=None):
+        self.os_client = get_opensearch_client(access_token=access_token)
 
     def get_query_dataset(
         self,
