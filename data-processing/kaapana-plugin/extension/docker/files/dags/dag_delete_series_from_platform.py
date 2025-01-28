@@ -6,7 +6,9 @@ from pathlib import Path
 
 from airflow.models import DAG
 from airflow.utils.dates import days_ago
+from airflow.utils.trigger_rule import TriggerRule
 from airflow.utils.log.logging_mixin import LoggingMixin
+
 from airflow.exceptions import AirflowSkipException
 
 from kaapana.blueprints.kaapana_global_variables import AIRFLOW_WORKFLOW_DIR, BATCH_NAME
@@ -58,10 +60,12 @@ dag = DAG(
 
 get_input = GetInputOperator(dag=dag, data_type="json")
 
+
 def set_skip_if_dcm_is_external(ds, **kwargs):
     batch_dir = Path(AIRFLOW_WORKFLOW_DIR) / kwargs["dag_run"].run_id / BATCH_NAME
     batch_folder = [f for f in glob.glob(os.path.join(batch_dir, "*"))]
 
+    print(batch_folder)
     for batch_element_dir in batch_folder:
         input_dir = Path(batch_element_dir) / get_input.operator_out_dir
         json_files = sorted(
@@ -70,10 +74,14 @@ def set_skip_if_dcm_is_external(ds, **kwargs):
                 recursive=True,
             )
         )
+        print(json_files)
         for json_file in json_files:
             with open(json_file, "r") as f:
                 metadata = json.load(f)
-            if metadata.get("00020016 SourceApplicationEntityTitle") == "kaapana_external":
+            if (
+                metadata.get("00020016 SourceApplicationEntityTitle_keyword")
+                == "kaapana_external"
+            ):
                 raise AirflowSkipException("DICOM file is comes from external PACS")
     return
 
@@ -91,10 +99,17 @@ delete_dcm_pacs = DeleteFromPacsOperator(
     dag=dag, input_operator=get_input, delete_complete_study=False, retries=1
 )
 delete_dcm_meta = DeleteFromMetaOperator(
-    dag=dag, input_operator=get_input, delete_complete_study=False, retries=1
+    dag=dag,
+    input_operator=get_input,
+    delete_complete_study=False,
+    retries=1,
+    trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
 )
 clean = LocalWorkflowCleanerOperator(dag=dag, clean_workflow_dir=True)
 
-get_input >> skip_if_dcm_is_external >> delete_dcm_meta >> clean
 
-(skip_if_dcm_is_external >> delete_dcm_pacs >> clean)
+# Task dependencies
+get_input >> skip_if_dcm_is_external >> delete_dcm_pacs >> delete_dcm_meta
+get_input >> delete_dcm_meta >> clean
+
+
