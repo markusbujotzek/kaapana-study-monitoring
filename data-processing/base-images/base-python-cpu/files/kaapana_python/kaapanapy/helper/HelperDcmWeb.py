@@ -361,6 +361,46 @@ class HelperDcmWeb:
         else:
             response.raise_for_status()
             return response.json()
+
+    def get_instances_of_series(self, study_uid: str, series_uid: str) -> List[dict]:
+        """This function retrieves all instances of a series from the PACS.
+
+        Args:
+            study_uid (str): Study Instance UID of the series to retrieve the instances from.
+            series_uid (str): Series Instance UID of the series to retrieve the instances from.
+
+        Returns:
+            List[dict]: List of instances of the series. Each instance is represented as a dictionary containing the instance metadata
+        """
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/series/{series_uid}/instances"
+        response = self.session.get(url)
+        if response.status_code == 204:
+            return []
+        elif response.status_code == 404:
+            return None
+        else:
+            response.raise_for_status()
+            return response.json()
+
+    def get_series_of_study(self, study_uid: str) -> List[dict]:
+        """This function retrieves all series of a study from the PACS.
+
+        Args:
+            study_uid (str): Study Instance UID of the study to retrieve the series from.
+
+        Returns:
+            List[dict]: List of series of the study. Each series is represented as a dictionary containing the series metadata
+        """
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/series"
+        r = self.session.get(url)
+        if r.status_code == 204:
+            return []
+        elif r.status_code == 404:
+            return None
+        else:
+            r.raise_for_status()
+            return r.json()
+
     def __encode_multipart_message_part(self, boundary: str, payload: bytes) -> bytes:
         """This function encodes the DICOM file as a part of the multipart message.
 
