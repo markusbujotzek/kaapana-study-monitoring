@@ -343,6 +343,24 @@ class HelperDcmWeb:
 
         return response
 
+    def get_instances_of_study(self, study_uid: str) -> List[dict]:
+        """This function retrieves all instances of a study from the PACS.
+
+        Args:
+            study_uid (str): Study Instance UID of the study to retrieve the instances from.
+
+        Returns:
+            List[dict]: List of instances of the study. Each instance is represented as a dictionary containing the instance metadata
+        """
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/instances"
+        response = requests.get(url, headers=self.auth_headers)
+        if response.status_code == 404:
+            return None
+        elif response.status_code == 204:
+            return []
+        else:
+            response.raise_for_status()
+            return response.json()
     def __encode_multipart_message_part(self, boundary: str, payload: bytes) -> bytes:
         """This function encodes the DICOM file as a part of the multipart message.
 
