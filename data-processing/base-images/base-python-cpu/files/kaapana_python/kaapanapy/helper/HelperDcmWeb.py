@@ -10,8 +10,7 @@ from typing import List
 
 import pydicom
 import requests
-from kaapanapy.helper import get_project_user_access_token
-from kaapanapy.settings import OpensearchSettings
+from kaapanapy.helper import get_project_user_access_token, load_workflow_config
 from requests_toolbelt.multipart import decoder
 
 logger = logging.getLogger(__name__)
@@ -56,13 +55,9 @@ class HelperDcmWeb:
             "Authorization": f"Bearer {self.access_token}",
             "x-forwarded-access-token": self.access_token,
         }
-        
+
         self.session = requests.Session()
         self.session.headers.update(self.auth_headers)
-        
-        # For Multiplexer
-        self.project_headers = {"project_index": OpensearchSettings().default_index}
-        self.session.headers.update(self.project_headers)
 
     def check_if_series_in_archive(self, seriesUID: str, studyUID: str) -> bool:
         """This function checks if a series exists in the archive.
@@ -343,24 +338,43 @@ class HelperDcmWeb:
 
         return response
 
-    def get_instances_of_study(self, study_uid: str) -> List[dict]:
-        """This function retrieves all instances of a study from the PACS.
+    def get_studies(self) -> List[dict]:
+        """Retrieve all studies from the DICOMWeb server.
 
         Args:
-            study_uid (str): Study Instance UID of the study to retrieve the instances from.
+            dcmweb_endpoint (str, optional): An optional endpoint URL for the DICOMWeb server.
 
         Returns:
-            List[dict]: List of instances of the study. Each instance is represented as a dictionary containing the instance metadata
+            List[dict]: A list of study information, or an empty list if no studies are found.
         """
-        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/instances"
-        response = requests.get(url, headers=self.auth_headers)
-        if response.status_code == 404:
-            return None
-        elif response.status_code == 204:
+        url = f"{self.dcmweb_rs_endpoint}/studies"
+        r = self.session.get(url)
+        if r.status_code == 204:
             return []
+        elif r.status_code == 404:
+            return None
         else:
-            response.raise_for_status()
-            return response.json()
+            r.raise_for_status()
+            return r.json()
+
+    def get_series_of_study(self, study_uid: str) -> List[dict]:
+        """This function retrieves all series of a study from the PACS.
+
+        Args:
+            study_uid (str): Study Instance UID of the study to retrieve the series from.
+
+        Returns:
+            List[dict]: List of series of the study. Each series is represented as a dictionary containing the series metadata
+        """
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/series"
+        r = self.session.get(url)
+        if r.status_code == 204:
+            return []
+        elif r.status_code == 404:
+            return None
+        else:
+            r.raise_for_status()
+            return r.json()
 
     def get_instances_of_series(self, study_uid: str, series_uid: str) -> List[dict]:
         """This function retrieves all instances of a series from the PACS.
@@ -382,24 +396,51 @@ class HelperDcmWeb:
             response.raise_for_status()
             return response.json()
 
-    def get_series_of_study(self, study_uid: str) -> List[dict]:
-        """This function retrieves all series of a study from the PACS.
+    def get_instances_of_study(self, study_uid: str) -> List[dict]:
+        """This function retrieves all instances of a study from the PACS.
 
         Args:
-            study_uid (str): Study Instance UID of the study to retrieve the series from.
+            study_uid (str): Study Instance UID of the study to retrieve the instances from.
 
         Returns:
-            List[dict]: List of series of the study. Each series is represented as a dictionary containing the series metadata
+            List[dict]: List of instances of the study. Each instance is represented as a dictionary containing the instance metadata
         """
-        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/series"
-        r = self.session.get(url)
-        if r.status_code == 204:
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/instances"
+        response = requests.get(url, headers=self.auth_headers)
+        if response.status_code == 404:
+            return None
+        elif response.status_code == 204:
             return []
-        elif r.status_code == 404:
+        else:
+            response.raise_for_status()
+            return response.json()
+
+    def get_instance_metadata(
+        self,
+        study_uid: str,
+        series_uid: str,
+        instance_uid: str,
+    ) -> List[dict]:
+        """Retrieve metadata for a specific instance.
+
+        Args:
+            study_uid (str): The Study Instance UID for the study.
+            series_uid (str): The Series Instance UID for the series.
+            instance_uid (str): The SOP Instance UID for the instance.
+            dcmweb_endpoint (str, optional): An optional endpoint URL for the DICOMWeb server.
+
+        Returns:
+            List[dict]: A list containing metadata for the specified instance.
+        """
+        url = f"{self.dcmweb_rs_endpoint}/studies/{study_uid}/series/{series_uid}/instances/{instance_uid}/metadata"
+        response = self.session.get(url)
+        if response.status_code == 204:
+            return []
+        elif response.status_code == 404:
             return None
         else:
-            r.raise_for_status()
-            return r.json()
+            response.raise_for_status()
+            return response.json()
 
     def __encode_multipart_message_part(self, boundary: str, payload: bytes) -> bytes:
         """This function encodes the DICOM file as a part of the multipart message.
