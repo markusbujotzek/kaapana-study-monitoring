@@ -135,6 +135,8 @@ put_html_to_minio = LocalMinioOperator(
     action="put",
     file_white_tuples=(".html"),
 )
+
+
 def has_ref_series(ds) -> bool:
     return ds.Modality in ["SEG", "RTSTRUCT"]
 
@@ -144,7 +146,7 @@ branch_by_has_ref_series = LocalDcmBranchingOperator(
     input_operator=get_input,
     condition=has_ref_series,
     branch_true_operator="get-ref-series-ct",
-    branch_false_operator="generate-segmentation-thumbnail",
+    branch_false_operator="generate-thumbnail",
 )
 
 get_ref_ct_series = LocalGetRefSeriesOperator(
@@ -155,9 +157,9 @@ get_ref_ct_series = LocalGetRefSeriesOperator(
     parallel_id="ct",
 )
 
-generate_segmentation_thumbnail = GenerateThumbnailOperator(
+generate_thumbnail = GenerateThumbnailOperator(
     dag=dag,
-    name="generate-segmentation-thumbnail",
+    name="generate-thumbnail",
     input_operator=get_input,
     orig_image_operator=get_ref_ct_series,
     trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
@@ -183,9 +185,7 @@ def upload_thumbnails_into_project_bucket(ds, **kwargs):
     batch_folder = [f for f in glob.glob(os.path.join(batch_dir, "*"))]
     for batch_element_dir in batch_folder:
         json_dir = Path(batch_element_dir) / extract_metadata.operator_out_dir
-        thumbnail_dir = (
-            Path(batch_element_dir) / generate_segmentation_thumbnail.operator_out_dir
-        )
+        thumbnail_dir = Path(batch_element_dir) / generate_thumbnail.operator_out_dir
 
         json_files = [f for f in json_dir.glob("*.json")]
         assert len(json_files) == 1
@@ -258,7 +258,12 @@ extract_metadata >> [
 (
     set_skip_if_not_custom_thumbnail_modality
     >> branch_by_has_ref_series
+    >> get_ref_ct_series
+    >> generate_thumbnail
+    >> put_thumbnail_to_project_bucket
 )
+
+(branch_by_has_ref_series >> generate_thumbnail)
 
 [
     push_json,
@@ -268,10 +273,3 @@ extract_metadata >> [
     put_html_to_minio,
     put_thumbnail_to_project_bucket,
 ] >> clean
-
-branch_by_has_ref_series >> [
-    get_ref_ct_series,
-    generate_segmentation_thumbnail,
-]
-get_ref_ct_series >> generate_segmentation_thumbnail
-generate_segmentation_thumbnail >> put_thumbnail_to_project_bucket >> clean
