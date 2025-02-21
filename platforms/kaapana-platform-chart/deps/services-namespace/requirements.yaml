@@ -65,3 +65,6 @@ dependencies:
     version: 0.0.0
   - name: project-management-ui
     version: 0.0.0
+# NOTIFICATIONS
+  - name: notifications-api
+    version: 0.0.0
