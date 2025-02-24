@@ -68,3 +68,5 @@ dependencies:
 # NOTIFICATIONS
   - name: notifications-api
     version: 0.0.0
+  - name: notifications-postgres-chart
+    version: 0.0.0
