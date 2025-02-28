@@ -1,0 +1,17 @@
+[
+  {
+    "search_tags": {
+      "0x0008,0x0060": "OT",
+      "0x0010,0x0010": "node-metrics"
+    },
+    "dag_ids": {
+      "study-monitoring-central-extractor": {
+        "fetch_method": "copy",
+        "rest_call": {
+          "global": {}
+        },
+        "single_execution": true
+      }
+    }
+  }
+]

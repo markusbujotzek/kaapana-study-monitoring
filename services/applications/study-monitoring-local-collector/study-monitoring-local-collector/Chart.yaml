@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+appVersion: "0.1.0"
+description: Collect Metrics of study software components and save/send as DICOM.
+name: study-monitoring-local-collector
+version: "0.0.0"
+keywords:
+- kaapanaworkflow

@@ -1,4 +1,5 @@
 from typing import List
+import requests
 from .schemas import Measurement
 from datetime import datetime
 from app.config import settings
@@ -30,10 +31,10 @@ class MonitoringService:
     def all_metrics(self) -> List[str]:
         return self.con.all_metrics()
 
-    def es_query(query):
+    def es_query(query, project_name: str=None):
         try:
             res = MonitoringService.opensearchClient.search(
-                index=OpensearchSettings().default_index,
+                index=project_name if project_name else OpensearchSettings().default_index,
                 body=query,
                 size=10000,
                 from_=0,
@@ -70,7 +71,7 @@ class MonitoringService:
             else:
                 return None
 
-    def get_modaility_series_count(modality):
+    def get_modaility_series_count(modality, project_name: str=None):
         modality_query = {
             "aggs": {
                 "1": {
@@ -93,14 +94,17 @@ class MonitoringService:
                 }
             },
         }
-        success, es_result = MonitoringService.es_query(query=modality_query)
+        success, es_result = MonitoringService.es_query(
+            query=modality_query,
+            project_name=project_name,
+        )
         if success:
             modality_series_count = es_result["hits"]["total"]["value"]
             return modality_series_count
         else:
             return -1
 
-    def get_study_series_patient_count():
+    def get_study_series_patient_count(project_name: str=None):
         study_series_patient_count_query = {
             "aggs": {
                 "1": {
@@ -124,7 +128,8 @@ class MonitoringService:
             "query": {"bool": {"filter": [], "should": [], "must_not": []}},
         }
         success, es_result = MonitoringService.es_query(
-            query=study_series_patient_count_query
+            query=study_series_patient_count_query,
+            project_name=project_name,
         )
         if success:
             study_count = es_result["aggregations"]["1"]["value"]
@@ -134,7 +139,7 @@ class MonitoringService:
         else:
             return -1, -1, -1
 
-    def get_node_metrics(self) -> bytes:
+    def get_node_metrics(self, project: str=None) -> bytes:
         registry = CollectorRegistry()
 
         i = Info("component_build", "Component Build Information.", registry=registry)
@@ -165,46 +170,60 @@ class MonitoringService:
         )
         g.set(component_uptime_seconds)
 
-        (
-            number_series_total,
-            number_studies_total,
-            number_patiens_total,
-        ) = MonitoringService.get_study_series_patient_count()
-
+        # create prometheus gauges for dicom studies, patients and series
         dicom_studies_total = Gauge(
             name="dicom_studies_total",
             documentation="Number of individual DICOM studies stored in the component.",
-            labelnames=["modality"],
+            labelnames=["trial_short_code","modality"],
             registry=registry,
         )
-        dicom_studies_total.labels("total").set(number_studies_total)
-
         dicom_patients_total = Gauge(
             name="dicom_patients_total",
             documentation="Number of individual patients stored in the component.",
-            labelnames=["modality"],
+            labelnames=["trial_short_code","modality"],
             registry=registry,
         )
-        dicom_patients_total.labels("total").set(number_patiens_total)
-
         dicom_series_total = Gauge(
             name="dicom_series_total",
             documentation="Number of individual series stored in the component.",
-            labelnames=["modality"],
+            labelnames=["trial_short_code","modality"],
             registry=registry,
         )
-        dicom_series_total.labels("total").set(number_series_total)
 
-        number_patiens_ct = MonitoringService.get_modaility_series_count(modality="CT")
-        dicom_series_total.labels("CT").set(number_patiens_ct)
-        number_patiens_mr = MonitoringService.get_modaility_series_count(modality="MR")
-        dicom_series_total.labels("MR").set(number_patiens_mr)
-        number_patiens_ot = MonitoringService.get_modaility_series_count(modality="OT")
-        dicom_series_total.labels("OT").set(number_patiens_ot)
-        number_patiens_seg = MonitoringService.get_modaility_series_count(
-            modality="SEG"
-        )
-        dicom_series_total.labels("SEG").set(number_patiens_seg)
+        if project:
+            print(f"Get metrics for specified project: {project}")
+            opensearch_projects = [f"project_{project}"]
+        else:
+            print("No metrics specified, get metrics for all projects.")
+            # get all projects of Kaapana platform (without "project_" prefix)
+            aii_response = requests.get(
+                f"http://aii-service.services.svc:8080/projects"
+            )
+            _opensearch_projects = [entry["opensearch_index"] for entry in aii_response.json() if "opensearch_index" in entry]
+            opensearch_projects = [x for x in _opensearch_projects]
+
+        
+        # request series, studies and patients count from all projects individually
+        for project in opensearch_projects:
+            project_name = project.replace("project_", "")
+
+            (
+                number_series_total,
+                number_studies_total,
+                number_patiens_total,
+            ) = MonitoringService.get_study_series_patient_count(project_name=project)
+            number_patiens_ct = MonitoringService.get_modaility_series_count(modality="CT", project_name=project)
+            number_patiens_mr = MonitoringService.get_modaility_series_count(modality="MR", project_name=project)
+            number_patiens_ot = MonitoringService.get_modaility_series_count(modality="OT", project_name=project)
+            number_patiens_seg = MonitoringService.get_modaility_series_count(modality="SEG", project_name=project)
+        
+            dicom_studies_total.labels(trial_short_code=project_name, modality="total").set(number_studies_total)
+            dicom_patients_total.labels(trial_short_code=project_name, modality="total").set(number_patiens_total)
+            dicom_series_total.labels(trial_short_code=project_name, modality="total").set(number_series_total)
+            dicom_series_total.labels(trial_short_code=project_name, modality="CT").set(number_patiens_ct)
+            dicom_series_total.labels(trial_short_code=project_name, modality="MR").set(number_patiens_mr)
+            dicom_series_total.labels(trial_short_code=project_name, modality="OT").set(number_patiens_ot)
+            dicom_series_total.labels(trial_short_code=project_name, modality="SEG").set(number_patiens_seg)
 
         system_load_24h_percent = MonitoringService.query_prom(
             query="100-(avg(rate(node_cpu_seconds_total{job='Node-Exporter',mode='idle'}[24h]))*100)",

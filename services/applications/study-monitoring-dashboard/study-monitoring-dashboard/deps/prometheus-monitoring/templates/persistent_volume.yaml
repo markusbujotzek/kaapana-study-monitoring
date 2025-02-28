@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: study-mon-prom-storage-volume-{{ .Values.global.project_name }}
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: "1Mi"
+  storageClassName: host-dir
+  accessModes:
+    - ReadWriteOnce
+  hostPath: 
+    path: {{ $.Values.global.fast_data_dir }}/node-monitoring-{{ .Values.global.project_name }}
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: {{ .Values.global.services_namespace }}
+    name: node-monitoring-pv-claim-{{ .Values.global.project_name }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: node-monitoring-pv-claim-{{ .Values.global.project_name }}
+  namespace: "{{ .Values.global.services_namespace }}"
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "1Mi"
+  volumeName: study-mon-prom-storage-volume-{{ .Values.global.project_name }}

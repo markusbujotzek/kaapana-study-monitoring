@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: study-mon-gf-{{ .Release.Name }}
+  namespace: "{{ .Values.global.services_namespace }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: study-mon-gf-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app-name: study-mon-gf-{{ .Release.Name }}
+    spec:
+      containers:
+      - name: grafana
+        image: "{{ .Values.global.registry_url }}/grafana:{{ .Values.global.kaapana_build_version  }}"
+        imagePullPolicy:  {{ .Values.global.pull_policy_pods }}
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: {{ .Values.global.credentials_grafana_password }}
+        - name: GF_SECURITY_ADMIN_USER
+          value: {{ .Values.global.credentials_grafana_username }}
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources:
+          requests:
+            memory: 100Mi
+          limits:
+            memory: 500Mi
+        volumeMounts:
+          - name: study-monitoring-gf-file
+            mountPath: /etc/grafana/grafana.ini
+            subPath: grafana.ini
+          - name: datasources-provisioning
+            mountPath: /etc/grafana/provisioning/datasources/study-mon-prom.yml
+            subPath: study-mon-prom.yml
+          - name: dashboard-provisioning
+            mountPath: /etc/grafana/provisioning/dashboards
+          - name: study-dashboard
+            mountPath: /etc/grafana/dashboards/study-dashboard/study-dashboard.json
+            subPath: study-dashboard.json
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 20
+          periodSeconds: 120
+      volumes:
+      - name: study-monitoring-gf-file
+        configMap:
+          name: study-monitoring-gf-config-{{ .Release.Name }}
+          items:
+          - key: grafana.ini
+            path: grafana.ini
+      - name: datasources-provisioning
+        configMap:
+          name: study-mon-gf-ds-prometheus-{{ .Release.Name }}
+          items:
+          - key: study-mon-prom.yml
+            path: study-mon-prom.yml
+      - name: dashboard-provisioning
+        configMap:
+          name: study-monitoring-gf-provisioning-dashboards-{{ .Release.Name }}
+      - name: study-dashboard
+        configMap:
+          name: study-mon-gf-dashboards-{{ .Release.Name }}
+          items:
+          - key: study-dashboard.json
+            path: study-dashboard.json
+      imagePullSecrets:
+        - name: registry-secret

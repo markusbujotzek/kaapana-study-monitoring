@@ -1,0 +1,275 @@
+[
+  {
+    "id": "UKMI",
+    "full_name": "Uniklinik Michelbinge",
+    "city": "Krickloch",
+    "lat": 50.08494829846013,
+    "lon": 9.276732133184034
+  },
+  {
+    "id": "CHA",
+    "full_name": "Diagnostische und interventionelle Radiologie und Nuklearmedizin, Charite - Universitätsmedizin Berlin",
+    "city": "Berlin",
+    "lat": 52.54121476379207,
+    "lon": 13.34409171164256
+  },
+  {
+    "id": "FAU",
+    "full_name": "Radiologisches Institut, Universitätsklinikum Erlangen",
+    "city": "Erlangen",
+    "lat": 49.60112090801054,
+    "lon": 11.009570798624466
+  },
+  {
+    "id": "LMU",
+    "full_name": "Klinik und Poliklinik für Radiologie, Universitätsklinikum der LMU München",
+    "city": "München",
+    "lat": 48.11011133452773,
+    "lon": 11.467720998593055
+  },
+  {
+    "id": "MHH",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Hannover",
+    "city": "Hannover",
+    "lat": 52.38278601865466,
+    "lon": 9.805282272241206
+  },
+  {
+    "id": "OVGU",
+    "full_name": "Universitätsklinik für Radiologie und Nuklearmedizin, Universitätsklinikum Magdeburg",
+    "city": "Magdeburg",
+    "lat": 52.10183665353979,
+    "lon": 11.618998998679114
+  },
+  {
+    "id": "TUM",
+    "full_name": "Institut für diagnostische und interventionelle Radiologie, Universitätsklinikum der TU München",
+    "city": "München",
+    "lat": 48.1385463947601,
+    "lon": 11.59881043730364
+  },
+  {
+    "id": "UKA",
+    "full_name": "Klinik für Interventionelle und Diagnostische Radiologie, Uniklinik Aachen",
+    "city": "Aachen",
+    "lat": 50.77694845652119,
+    "lon": 6.043381529065179
+  },
+  {
+    "id": "UKAU",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie und Neuroradiologie, Universitätsklinikum Augsburg",
+    "city": "Augsburg",
+    "lat": 48.38486019386124,
+    "lon": 10.837912571316233
+  },
+  {
+    "id": "UKB",
+    "full_name": "Klinik für Interventionelle und Diagnostische Radiologie, Universitätsklinikum Bonn",
+    "city": "Bonn",
+    "lat": 50.69861446198019,
+    "lon": 7.1046196139911135
+  },
+  {
+    "id": "UKBO",
+    "full_name": "Diagnostische und Interventionelle Radiologie, Universitätsklinikum Bochum",
+    "city": "Bochum",
+    "lat": 50.69865273747722,
+    "lon": 7.104595221712914
+  },
+  {
+    "id": "UKD",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Düsseldorf",
+    "city": "Düsseldorf",
+    "lat": 51.194695840474104,
+    "lon": 6.791630459089719
+  },
+  {
+    "id": "UKDD",
+    "full_name": "Institut und Poliklinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Dresden",
+    "city": "Dresden",
+    "lat": 51.0567620851836,
+    "lon": 13.782441532410271
+  },
+  {
+    "id": "UKE",
+    "full_name": "Diagnostische und Interventionelle Radiologie und Nuklearmedizin, Universitätsklinikum Hamburg",
+    "city": "Hamburg",
+    "lat": 53.59082660977002,
+    "lon": 9.973951012705731
+  },
+  {
+    "id": "UKF",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Frankfurt",
+    "city": "Frankfurt",
+    "lat": 50.09554334392531,
+    "lon": 8.662780631572714
+  },
+  {
+    "id": "UKFR",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie , Universitätsklinikum Freiburg",
+    "city": "Freiburg",
+    "lat": 48.00647481378038,
+    "lon": 7.839217335225383
+  },
+  {
+    "id": "UKGI",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Gießen-Marburg",
+    "city": "Gießen",
+    "lat": 50.57484488983127,
+    "lon": 8.6648312244731
+  },
+  {
+    "id": "UKGW",
+    "full_name": "Zentrum für Radiologie, Universitätsklinikum Greifswald",
+    "city": "Greifswald",
+    "lat": 54.08647703221964,
+    "lon": 13.407902737625395
+  },
+  {
+    "id": "UKHAL",
+    "full_name": "Universitätsklinik und Poliklinik für Radiologie, Universitätsklinikum Halle",
+    "city": "Halle",
+    "lat": 51.50166013676604,
+    "lon": 11.937400198665802
+  },
+  {
+    "id": "UKHD",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Heidelberg und Deutsches Zentrum für Lungenforschung",
+    "city": "Heidelberg",
+    "lat": 49.414376473346415,
+    "lon": 8.672633550582834
+  },
+  {
+    "id": "UKHOM",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Homburg",
+    "city": "Homburg",
+    "lat": 49.30388907064566,
+    "lon": 7.348038327453867
+  },
+  {
+    "id": "UKJ",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Jena",
+    "city": "Jena",
+    "lat": 50.88490328527602,
+    "lon": 11.622254827488014
+  },
+  {
+    "id": "UKK",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Köln",
+    "city": "Köln",
+    "lat": 50.92366207944496,
+    "lon": 6.91705422748882
+  },
+  {
+    "id": "UKKI",
+    "full_name": "Klinik für Radiologie und Neuroradiologie, Universitätsklinikum Schleswig-Holstein Kiel",
+    "city": "Kiel",
+    "lat": 54.329614138875975,
+    "lon": 10.144122399175654
+  },
+  {
+    "id": "UKL",
+    "full_name": "Klinik und Poliklinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Leipzig",
+    "city": "Leipzig",
+    "lat": 51.33134227596431,
+    "lon": 12.38581945633352
+  },
+  {
+    "id": "UKLÜ",
+    "full_name": "Klinik für Radiologie und Nuklearmedizin, Universitätsklinikum Schleswig-Holstein, Lübeck",
+    "city": "Lübeck",
+    "lat": 53.834275379988085,
+    "lon": 10.703669456390012
+  },
+  {
+    "id": "UKM",
+    "full_name": "Klinik für Radiologie, Universitätsklinikum Münster",
+    "city": "Münster",
+    "lat": 51.960563590763336,
+    "lon": 7.5952839121688305
+  },
+  {
+    "id": "UKMA",
+    "full_name": "Klinik für Radiologie und Nuklearmedizin, Universitätsklinikum Mannheim",
+    "city": "Mannheim",
+    "lat": 49.492168410319415,
+    "lon": 8.485693727457855
+  },
+  {
+    "id": "UKMAR",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Marburg",
+    "city": "Marburg",
+    "lat": 50.81386674406223,
+    "lon": 8.806431408804574
+  },
+  {
+    "id": "UKMZ",
+    "full_name": "Klinik und Poliklinik für Diagnostische und Interventionelle Radiologie, Universitätsmedizin Mainz",
+    "city": "Mainz",
+    "lat": 49.99408161817106,
+    "lon": 8.256569477908343
+  },
+  {
+    "id": "UKR",
+    "full_name": "Institut für Röntgendiagnostik, Universitätsklinikum Regensburg",
+    "city": "Regensburg",
+    "lat": 48.986930256418944,
+    "lon": 12.09060532906164
+  },
+  {
+    "id": "UKT",
+    "full_name": "Abteilung für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Tübingen",
+    "city": "Tübingen",
+    "lat": 48.529874369256895,
+    "lon": 9.03750009860172
+  },
+  {
+    "id": "UKUL",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Ulm",
+    "city": "Ulm",
+    "lat": 48.42259603952313,
+    "lon": 9.948853022048805
+  },
+  {
+    "id": "UKWÜ",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Würzburg",
+    "city": "Würzburg",
+    "lat": 49.80702200329828,
+    "lon": 9.95869349862886
+  },
+  {
+    "id": "UME",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie und Neuroradiologie, Universitätsklinikum Essen",
+    "city": "Essen",
+    "lat": 51.436434724100344,
+    "lon": 6.98902931862675
+  },
+  {
+    "id": "UMGÖ",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Göttingen",
+    "city": "Göttingen",
+    "lat": 51.551044867021226,
+    "lon": 9.942800060731052
+  },
+  {
+    "id": "UMR",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Kinder- und Neuroradiologie, Universitätsmedizin Rostock",
+    "city": "Rostock",
+    "lat": 54.08585626652251,
+    "lon": 12.102153927560002
+  },
+  {
+    "id": "UMO",
+    "full_name": "Institut für Diagnostische und Interventionelle Radiologie, Universitätsmedizin Oldenburg",
+    "city": "Oldenburg",
+    "lat": 53.14401669821516,
+    "lon": 8.211984903656818
+  },
+  {
+    "id": "UKBI",
+    "full_name": "Klinik für Diagnostische und Interventionelle Radiologie, Universitätsklinikum Bielefeld",
+    "city": "Bielefeld",
+    "lat": 52.04171406043851,
+    "lon": 8.541068012632538
+  }
+]

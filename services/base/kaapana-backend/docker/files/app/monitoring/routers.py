@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, Response, Depends
+from fastapi import APIRouter, Response, Depends, Query
 from fastapi.responses import PlainTextResponse
 from app.dependencies import get_monitoring_service
 from .schemas import Measurement
@@ -34,9 +34,15 @@ def node_info(client=Depends(get_monitoring_service)):
 
 
 @router.get("/metrics/scrape", response_class=PlainTextResponse)
-def scrape(client=Depends(get_monitoring_service)):
+def scrape(
+    project: str = Query(None, description="Filter metrics by project"), 
+    client=Depends(get_monitoring_service)
+):
     """Return Kaapana node metrics"""
-    return client.get_node_metrics()
+    metrics = client.get_node_metrics(project)
+    print(f"DEF SCRAPE() {project=}")
+    print(f"DEF SCRAPE() {metrics=}")
+    return metrics
 
 
 @router.get("/metrics/mem-usage", response_model=Measurement)

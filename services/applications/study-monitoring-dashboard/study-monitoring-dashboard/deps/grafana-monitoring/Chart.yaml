@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+appVersion: "8.4.4"
+description: Launches a Grafana Instance for study Monitoring
+name: study-mon-gf
+version: "0.0.0"
+keywords:
+- kaapanaapplication
+- kaapanaint
+- kaapanamultiinstallable

@@ -1,0 +1,12 @@
+---
+dependencies:
+  - name: kaapana-library-chart
+    version: 0.0.0
+    repository: "file://../../../../kaapana/services/utils/kaapana-library-chart"
+  - name: study-mon-prom
+    version: 0.0.0
+    repository: "file://deps/prometheus-monitoring"
+  - name: study-mon-gf
+    version: 0.0.0
+    repository: "file://deps/grafana-monitoring"
+

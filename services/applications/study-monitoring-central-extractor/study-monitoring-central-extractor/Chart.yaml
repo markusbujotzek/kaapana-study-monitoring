@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+appVersion: "0.1.0"
+description: Extract locally collected metrics and provide to study Monitoing Dashboard.
+name: study-monitoring-central-extractor
+version: "0.0.0"
+keywords:
+- kaapanaworkflow

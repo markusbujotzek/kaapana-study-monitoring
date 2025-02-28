@@ -1,0 +1,66 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: study-mon-prom-{{ .Release.Name }}
+  namespace: "{{ .Values.global.services_namespace }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: study-mon-prom-node-mon-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app-name: study-mon-prom-node-mon-{{ .Release.Name }}
+    spec:
+      initContainers:
+      - name: volume-permissions
+        image: "{{ .Values.global.registry_url }}/busybox:{{ .Values.global.kaapana_build_version  }}"
+        imagePullPolicy:  {{ .Values.global.pull_policy_pods }}
+        command: ["sh", "-c", "chown -R 1000:1000 /node-monitoring-{{ .Values.global.project_name }}"]
+        volumeMounts:
+        - name: study-mon-prom-storage-volume-{{ .Values.global.project_name }}
+          mountPath: /node-monitoring-{{ .Values.global.project_name }}
+        securityContext:
+          runAsUser: 0
+      securityContext:
+        runAsUser: 1000
+      containers:
+        - name: prometheus
+          image: "{{ .Values.global.registry_url }}/prometheus:{{ .Values.global.kaapana_build_version  }}"
+          imagePullPolicy:  {{ .Values.global.pull_policy_pods }}
+          args:
+            - "--config.file=/etc/study-mon-prom.yaml"
+            - "--log.level=warn"
+            - "--storage.tsdb.path=/node-monitoring-{{ .Values.global.project_name }}"
+            - "--storage.tsdb.no-lockfile"  # multiinstallable extension: avoid issue of multiple access on /node-monitoring-{{ .Values.global.project_name }}
+            - "--web.external-url=/prom-monitoring"
+            - "--web.route-prefix=/prom-monitoring"
+          ports:
+            - containerPort: 9090
+          resources:
+            requests:
+              memory: 300Mi
+            limits:
+              memory: 5000Mi
+          volumeMounts:
+            - name: study-mon-prom-config-vol
+              mountPath: /etc/study-mon-prom.yaml
+              subPath: study-mon-prom.yaml
+            - name: study-mon-prom-storage-volume-{{ .Values.global.project_name }}
+              mountPath: /node-monitoring-{{ .Values.global.project_name }}
+      volumes:
+        - name: study-mon-prom-config-vol
+          configMap:
+            name: study-mon-prom-config-{{ .Release.Name }}
+            items:
+            - key: study-mon-prom.yaml
+              path: study-mon-prom.yaml
+        - name: study-mon-prom-storage-volume-{{ .Values.global.project_name }}
+          persistentVolumeClaim:
+            claimName: node-monitoring-pv-claim-{{ .Values.global.project_name }}
+      imagePullSecrets:
+      - name: registry-secret
+---
