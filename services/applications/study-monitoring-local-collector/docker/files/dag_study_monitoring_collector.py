@@ -35,6 +35,9 @@ dag = DAG(
     # schedule_interval="*/15 * * * *",
 )
 
+CENTRAL_IP_ADDRESS = "TO-BE-REPLACED"
+CENTRAL_DICOM_PORT = "TO-BE-REPLACED"
+
 get_kaapana_metrics = LocalGetMetricsOperator(
     dag=dag,
     component_id="kaapana",
