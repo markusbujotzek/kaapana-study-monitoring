@@ -2,8 +2,8 @@ from airflow.utils.dates import days_ago
 from datetime import timedelta, datetime
 from airflow.models import DAG
 from kaapana.operators.Bin2DcmOperator import Bin2DcmOperator
-from racoon_monitoring.LocalGetMetricsOperator import LocalGetMetricsOperator
-from racoon_monitoring.LocalAggregateMetricsOperator import (
+from study_monitoring.LocalGetMetricsOperator import LocalGetMetricsOperator
+from study_monitoring.LocalAggregateMetricsOperator import (
     LocalAggregateMetricsOperator,
 )
 from airflow.utils.trigger_rule import TriggerRule
@@ -14,20 +14,14 @@ from kaapana.blueprints.kaapana_global_variables import (
     SERVICES_NAMESPACE,
 )
 from kaapana.operators.DcmSendOperator import DcmSendOperator
-from study.site_settings import (
-    MINT_IP_ADDRESS,
-    MINT_HTTPS_PORT,
-    SATORI_IP_ADDRESS,
-    SATORI_HTTPS_PORT,
-    WINDOWS_SERVER_DOMAIN,
-    WINDOWS_SERVER_MONITORING_PORT,
-    IMFUSION_IP_ADDRESS,
-    IMFUSION_HTTPS_PORT,
-)
+
+CENTRAL_IP_ADDRESS = "10.128.129.41"
+CENTRAL_DICOM_PORT = 1112
+
 
 max_active_runs = 5
 args = {
-    "ui_visible": False,
+    "ui_visible": True,
     "owner": "kaapana",
     "start_date": days_ago(0),
     "retries": 1,
@@ -44,38 +38,28 @@ dag = DAG(
     # schedule_interval="*/15 * * * *",
 )
 
-get_jip_metrics = LocalGetMetricsOperator(
+get_kaapana_metrics = LocalGetMetricsOperator(
     dag=dag,
-    component_id="jip",
+    component_id="kaapana",
     metrics_endpoint=f"http://kaapana-backend-service.{SERVICES_NAMESPACE}.svc:5000/monitoring/metrics/scrape",
     verify_ssl=False,
 )
-get_mint_metrics = LocalGetMetricsOperator(
-    dag=dag,
-    component_id="mint",
-    metrics_endpoint=f"https://{MINT_IP_ADDRESS}:{MINT_HTTPS_PORT}/metrics",
-    verify_ssl=False,
-)
-get_satori_metrics = LocalGetMetricsOperator(
-    dag=dag,
-    component_id="satori",
-    metrics_endpoint=f"https://{SATORI_IP_ADDRESS}:{SATORI_HTTPS_PORT}/metrics",
-    verify_ssl=False,
-)
-get_imfusion_metrics = LocalGetMetricsOperator(
-    dag=dag,
-    component_id="imfusion",
-    metrics_endpoint=f"http://{IMFUSION_IP_ADDRESS}:{IMFUSION_HTTPS_PORT}/metrics",
-    verify_ssl=False,
-)
+
+
+# TODO: uncomment to collect metrics from further third-party systems
+# get_third_party_metrics = LocalGetMetricsOperator(
+#     dag=dag,
+#     component_id="third_party",
+#     metrics_endpoint=f"https://:{THRID_PARTY}/metrics",
+#     verify_ssl=False,
+# )
 
 aggregate_metrics = LocalAggregateMetricsOperator(
     dag=dag,
     metrics_operators=[
-        get_jip_metrics,
-        get_mint_metrics,
-        get_satori_metrics,
-        get_imfusion_metrics,
+        get_kaapana_metrics,
+        # TODO: uncomment to collect metrics from further third-party systems
+        # get_third_party_metrics,
     ],
     instance_name=INSTANCE_NAME,
     version=KAAPANA_BUILD_VERSION,
@@ -110,21 +94,20 @@ dcm_send_int = DcmSendOperator(
     input_operator=txt2dcm,
 )
 
-dcm_send_mint = DcmSendOperator(
+dcm_send_to_central = DcmSendOperator(
     dag=dag,
-    name="dcm-send-mint",
+    name="dcm-send-central",
     level="batch",
-    pacs_host=MINT_IP_ADDRESS,
-    pacs_port="2010",
+    pacs_host=CENTRAL_IP_ADDRESS,
+    pacs_port=f"{CENTRAL_DICOM_PORT}",
     ae_title="node-metrics",
     input_operator=txt2dcm,
 )
 
 clean = LocalWorkflowCleanerOperator(dag=dag, clean_workflow_dir=True)
 
-get_jip_metrics >> aggregate_metrics
-get_mint_metrics >> aggregate_metrics
-get_satori_metrics >> aggregate_metrics
-get_imfusion_metrics >> aggregate_metrics
+get_kaapana_metrics >> aggregate_metrics
+# TODO: uncomment to collect metrics from further third-party systems
+# get_third_party_metrics >> aggregate_metrics
 aggregate_metrics >> txt2dcm >> dcm_send_int >> clean
-txt2dcm >> dcm_send_mint >> clean
+txt2dcm >> dcm_send_to_central >> clean

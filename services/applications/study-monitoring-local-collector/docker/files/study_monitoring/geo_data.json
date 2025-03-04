@@ -7,6 +7,62 @@
     "lon": 9.276732133184034
   },
   {
+    "id": "VHIO",
+    "full_name": "VHIO Barcelona",
+    "city": "Barcelona",
+    "lat": 41.3874,
+    "lon": 2.1686
+  },
+  {
+    "id": "KI",
+    "full_name": "Karolinska Institute Solna",
+    "city": "Solna",
+    "lat": 59.36004,
+    "lon": 18.00086
+  },
+  {
+    "id": "UCAM",
+    "full_name": "University of Cambridge",
+    "city": "Cambridge",
+    "lat": 52.1951,
+    "lon": 0.1313
+  },
+  {
+    "id": "DKFZ",
+    "full_name": "Deutsches Krebsforschungszentrum Heidelberg",
+    "city": "Heidelberg",
+    "lat": 49.398750,
+    "lon": 8.672434
+  },
+  {
+    "id": "NKI",
+    "full_name": "Netherlands Cancer Institute",
+    "city": "Amsterdam",
+    "lat": 52.371807,
+    "lon": 4.896029
+  },
+  {
+    "id": "INT",
+    "full_name": "Instituto Nazionale Tumori",
+    "city": "Milan",
+    "lat": 45.510139,
+    "lon": 9.084680
+  },
+  {
+    "id": "GR",
+    "full_name": "Institut Gustave Roussy Paris",
+    "city": "Paris",
+    "lat": 48.85341,
+    "lon": 2.3488
+  },
+  {
+    "id": "MANU",
+    "full_name": "Manchester University",
+    "city": "Manchester",
+    "lat": 53.48095,
+    "lon": -2.23743
+  },
+  {
     "id": "CHA",
     "full_name": "Diagnostische und interventionelle Radiologie und Nuklearmedizin, Charite - Universitätsmedizin Berlin",
     "city": "Berlin",

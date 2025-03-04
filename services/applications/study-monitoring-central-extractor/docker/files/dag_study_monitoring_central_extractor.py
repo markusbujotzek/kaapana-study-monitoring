@@ -4,7 +4,7 @@ from airflow.models import DAG
 from kaapana.operators.LocalWorkflowCleanerOperator import LocalWorkflowCleanerOperator
 from kaapana.operators.LocalGetInputDataOperator import LocalGetInputDataOperator
 from kaapana.operators.Bin2DcmOperator import Bin2DcmOperator
-from racoon_monitoring.LocalPushToPromOperator import LocalPushToPromOperator
+from study_monitoring.LocalPushToPromOperator import LocalPushToPromOperator
 from kaapana.operators.DeleteFromMetaOperator import DeleteFromMetaOperator
 from kaapana.operators.DeleteFromPacsOperator import DeleteFromPacsOperator
 

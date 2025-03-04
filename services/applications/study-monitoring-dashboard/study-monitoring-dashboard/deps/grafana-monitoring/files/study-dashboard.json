@@ -30,7 +30,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -163,7 +163,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -303,7 +303,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -391,7 +391,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -479,7 +479,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -730,7 +730,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -948,7 +948,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -1157,7 +1157,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -1247,7 +1247,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -1337,7 +1337,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -1439,7 +1439,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PAA2FACA5D5FAFF74"
+          "uid": "P62313C44B5F653BF"
         },
         "definition": "label_values(instance_info,instance)",
         "includeAll": true,
@@ -1458,12 +1458,12 @@
       {
         "allValue": ".*",
         "current": {
-          "text": "jip",
-          "value": "jip"
+          "text": "kaapana",
+          "value": "kaapana"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PAA2FACA5D5FAFF74"
+          "uid": "P62313C44B5F653BF"
         },
         "definition": "label_values(component_build_info{job!=\"Pushgateway Metrics\"},job)",
         "includeAll": false,

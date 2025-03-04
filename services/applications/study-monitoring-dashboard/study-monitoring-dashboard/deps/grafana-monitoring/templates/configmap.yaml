@@ -473,7 +473,7 @@ data:
     default_language = en-US
 
     # Path to a custom home page. Users are only redirected to this if the default home dashboard is used. It should match a frontend route and contain a leading slash.
-    home_page = d/aectrfo1l5e68a/study-monitoring-dashboard-project-separation?orgId=1&from=now-24h&to=now&var-site_instance=$__all&var-component=jip
+    home_page = d/aectrfo1l5e68a/study-monitoring-dashboard-project-separation?orgId=1&from=now-24h&to=now&var-site_instance=$__all&var-component=kaapana
 
     # External user management
     external_manage_link_url =

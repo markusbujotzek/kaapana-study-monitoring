@@ -4,6 +4,6 @@ LABEL IMAGE="dag-study-monitoring-central-extractor"
 LABEL VERSION="0.0.0"
 LABEL CI_IGNORE="False"
 
-COPY files/racoon_monitoring /kaapana/tmp/dags/racoon_monitoring
-COPY files/dag_racoon_monitoring_central_extractor.py /kaapana/tmp/dags/dag_racoon_monitoring_central_extractor.py
-COPY files/dag_racoon_monitoring_central_extractor_trigger_rule.json /kaapana/tmp/dags/dag_racoon_monitoring_central_extractor_trigger_rule.json
+COPY files/study_monitoring /kaapana/tmp/dags/study_monitoring
+COPY files/dag_study_monitoring_central_extractor.py /kaapana/tmp/dags/dag_study_monitoring_central_extractor.py
+COPY files/dag_study_monitoring_central_extractor_trigger_rule.json /kaapana/tmp/dags/dag_study_monitoring_central_extractor_trigger_rule.json
