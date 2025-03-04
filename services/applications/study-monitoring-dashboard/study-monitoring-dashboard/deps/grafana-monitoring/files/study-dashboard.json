@@ -136,9 +136,9 @@
         "view": {
           "allLayers": true,
           "id": "coords",
-          "lat": 51.262699,
-          "lon": 9.749036,
-          "zoom": 6
+          "lat": 50,
+          "lon": 7.5,
+          "zoom": 4.7
         }
       },
       "pluginVersion": "11.3.1",
@@ -146,7 +146,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "round(time() - instance_info{instance=~\"$site_instance\",job=\"instance_info\"})",
@@ -281,7 +281,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -368,7 +368,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -456,7 +456,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -544,7 +544,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -567,7 +567,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -650,7 +650,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -669,7 +669,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -683,7 +683,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -697,7 +697,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -711,7 +711,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -895,7 +895,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "component_build_info{instance=~\"$site_instance\",job=~\"$component\"}",
@@ -998,7 +998,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "avg(component_uptime_seconds{instance=~\"$site_instance\",job=~\"$component\"})",
@@ -1014,7 +1014,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PAA2FACA5D5FAFF74"
+        "uid": "P62313C44B5F653BF"
       },
       "fieldConfig": {
         "defaults": {
@@ -1113,7 +1113,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": true,
           "expr": "sum(jobs_success_total{job=\"$component\",instance=~\"$site_instance\"})",
@@ -1127,7 +1127,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": true,
           "expr": "sum(jobs_failed_total{job=\"$component\",instance=~\"$site_instance\"})",
@@ -1140,7 +1140,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(jobs_queued_total{job=\"$component\",instance=~\"$site_instance\"})",
@@ -1215,7 +1215,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/\"})",
@@ -1229,7 +1229,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_total_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/\"} - storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/\"})",
@@ -1305,7 +1305,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/data\"})",
@@ -1319,7 +1319,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_total_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/data\"} - storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/data\"})",
@@ -1395,7 +1395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/home\"})",
@@ -1409,7 +1409,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAA2FACA5D5FAFF74"
+            "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
           "expr": "sum(storage_size_total_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/home\"} - storage_size_free_bytes{instance=~\"$site_instance\",job=\"$component\",mount_point=\"/home\"})",
