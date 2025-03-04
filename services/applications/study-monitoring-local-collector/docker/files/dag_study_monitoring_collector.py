@@ -15,9 +15,6 @@ from kaapana.blueprints.kaapana_global_variables import (
 )
 from kaapana.operators.DcmSendOperator import DcmSendOperator
 
-CENTRAL_IP_ADDRESS = "10.128.129.41"
-CENTRAL_DICOM_PORT = 1112
-
 
 max_active_runs = 5
 args = {
