@@ -159,10 +159,11 @@ class MonitoringService:
             }
         )
 
-        component_uptime_seconds = MonitoringService.query_prom(
-            query="round(time() - process_start_time_seconds{job='oAuth2-proxy'})",
-            return_type="int",
-        )
+        # component_uptime_seconds = MonitoringService.query_prom(
+        #     query="round(time() - process_start_time_seconds{job='oAuth2-proxy'})",
+        #     return_type="int",
+        # )
+        component_uptime_seconds = round(int(datetime.now().timestamp()) - int(datetime.fromisoformat(settings.kaapana_deployment_timestamp).timestamp()))
         g = Gauge(
             name="component_uptime_seconds",
             documentation="Number of seconds the system is running.",
