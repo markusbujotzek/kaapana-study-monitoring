@@ -688,7 +688,7 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "sum(dicom_series_total{job=\"$component\",instance=~\"$site_instance\",modality=\"SEG\"})",
-          "hide": true,
+          "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "SEG",
