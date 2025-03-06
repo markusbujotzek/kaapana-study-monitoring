@@ -1116,7 +1116,7 @@
             "uid": "P62313C44B5F653BF"
           },
           "exemplar": true,
-          "expr": "sum(jobs_success_total{job=\"$component\",instance=~\"$site_instance\"})",
+          "expr": "sum by(instance) (jobs_success_total{job=\"$component\",instance=~\"$site_instance\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1130,7 +1130,7 @@
             "uid": "P62313C44B5F653BF"
           },
           "exemplar": true,
-          "expr": "sum(jobs_failed_total{job=\"$component\",instance=~\"$site_instance\"})",
+          "expr": "sum by(instance) (jobs_failed_total{job=\"$component\",instance=~\"$site_instance\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1143,7 +1143,7 @@
             "uid": "P62313C44B5F653BF"
           },
           "exemplar": false,
-          "expr": "sum(jobs_queued_total{job=\"$component\",instance=~\"$site_instance\"})",
+          "expr": "sum by(instance) (jobs_queued_total{job=\"$component\",instance=~\"$site_instance\"})",
           "hide": false,
           "instant": true,
           "interval": "",
