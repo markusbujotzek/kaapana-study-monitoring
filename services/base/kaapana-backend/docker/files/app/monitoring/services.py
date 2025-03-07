@@ -173,7 +173,7 @@ class MonitoringService:
         print(f"DCMTAG ES result: {es_result}")
         if success:
             dcmtag_count = es_result["aggregations"]["1"]["buckets"]
-            dcmtag_count_dict = {item['key']: item['doc_count'] for item in dcmtag_count}
+            dcmtag_count_dict = {str(item['key']).upper(): item['doc_count'] for item in dcmtag_count}
             return dcmtag_count_dict
         else:
             return -1
