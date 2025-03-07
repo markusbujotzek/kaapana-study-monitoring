@@ -132,12 +132,51 @@ class MonitoringService:
             project_name=project_name,
         )
         if success:
+            print(f"ES result: {es_result}")
             study_count = es_result["aggregations"]["1"]["value"]
             series_count = es_result["aggregations"]["2"]["value"]
             patient_count = es_result["aggregations"]["3"]["value"]
             return series_count, study_count, patient_count
         else:
             return -1, -1, -1
+        
+    def get_present_dcmtag_series(dcm_tag_name: str=None, project_name: str=None):
+        if dcm_tag_name == "body_part_examined":
+            dcmtag_field_value = "00180015 BodyPartExamined_keyword.keyword"
+        elif dcm_tag_name == "manufacturer":
+            dcmtag_field_value = "00080070 Manufacturer_keyword.keyword"
+        print(f"DCMTAG field value: {dcmtag_field_value}")
+        assert dcmtag_field_value is not None, "Invalid DICOM tag name."
+
+        dcmtag_query = {
+            "aggs": {
+                "1": {
+                    "terms": {
+                        "field": dcmtag_field_value,
+                        "size": 1000
+                    }
+                }
+            },
+            "size": 0,
+            "stored_fields": ["*"],
+            "query": {
+                "bool": {
+                    "filter": []
+                }
+            }
+        }
+
+        success, es_result = MonitoringService.es_query(
+            query=dcmtag_query,
+            project_name=project_name,
+        )
+        print(f"DCMTAG ES result: {es_result}")
+        if success:
+            dcmtag_count = es_result["aggregations"]["1"]["buckets"]
+            dcmtag_count_dict = {item['key']: item['doc_count'] for item in dcmtag_count}
+            return dcmtag_count_dict
+        else:
+            return -1
 
     def get_node_metrics(self, project: str=None) -> bytes:
         registry = CollectorRegistry()
@@ -190,7 +229,20 @@ class MonitoringService:
             labelnames=["trial_short_code","modality"],
             registry=registry,
         )
-
+        dicom_series_manufacturer = Gauge(
+            name="dicom_series_manufacturer",
+            documentation="Number of unique manufacturers in DICOM series stored in the component.",
+            labelnames=["trial_short_code","manufacturer"],
+            registry=registry,
+        )
+        dicom_series_bodypartexamined = Gauge(
+            name="dicom_series_bodypartexamined",
+            documentation="Number of unique body_part_examined in DICOM series stored in the component.",
+            labelnames=["trial_short_code", "body_part_examined"],
+            registry=registry,
+        )
+        
+        # project context
         if project:
             print(f"Get metrics for specified project: {project}")
             opensearch_projects = [f"project_{project}"]
@@ -202,29 +254,46 @@ class MonitoringService:
             )
             _opensearch_projects = [entry["opensearch_index"] for entry in aii_response.json() if "opensearch_index" in entry]
             opensearch_projects = [x for x in _opensearch_projects]
-
         
         # request series, studies and patients count from all projects individually
         for project in opensearch_projects:
             project_name = project.replace("project_", "")
 
+            # get manufacturer and body_part_examined counts of seriesn
+            present_body_part_examined = MonitoringService.get_present_dcmtag_series(dcm_tag_name="body_part_examined", project_name=project)
+            present_manufacturer = MonitoringService.get_present_dcmtag_series(dcm_tag_name="manufacturer", project_name=project)
+            print(f"Present body part examined: {present_body_part_examined}")
+            print(f"Present manufacturer: {present_manufacturer}")
+            # set manufacturers
+            for manufacturer, count in present_manufacturer.items():
+                dicom_series_manufacturer.labels(trial_short_code=project_name, manufacturer=manufacturer).set(count)
+            # set body_part_examined
+            for body_part_examined, count in present_body_part_examined.items():
+                dicom_series_bodypartexamined.labels(trial_short_code=project_name, body_part_examined=body_part_examined).set(count)
+
+            # get series, studies and patients counts for any modality
             (
                 number_series_total,
                 number_studies_total,
                 number_patiens_total,
             ) = MonitoringService.get_study_series_patient_count(project_name=project)
-            number_patiens_ct = MonitoringService.get_modaility_series_count(modality="CT", project_name=project)
-            number_patiens_mr = MonitoringService.get_modaility_series_count(modality="MR", project_name=project)
-            number_patiens_ot = MonitoringService.get_modaility_series_count(modality="OT", project_name=project)
-            number_patiens_seg = MonitoringService.get_modaility_series_count(modality="SEG", project_name=project)
+
+            # get series counts for specific modalities: CT, MR, OT, SEG
+            number_series_ct = MonitoringService.get_modaility_series_count(modality="CT", project_name=project)
+            number_series_mr = MonitoringService.get_modaility_series_count(modality="MR", project_name=project)
+            number_series_ot = MonitoringService.get_modaility_series_count(modality="OT", project_name=project)
+            number_series_seg = MonitoringService.get_modaility_series_count(modality="SEG", project_name=project)
+
+            # get series counts for specific body regions and manufacturers
+            number_series_body_part_examined = {}
         
             dicom_studies_total.labels(trial_short_code=project_name, modality="total").set(number_studies_total)
             dicom_patients_total.labels(trial_short_code=project_name, modality="total").set(number_patiens_total)
             dicom_series_total.labels(trial_short_code=project_name, modality="total").set(number_series_total)
-            dicom_series_total.labels(trial_short_code=project_name, modality="CT").set(number_patiens_ct)
-            dicom_series_total.labels(trial_short_code=project_name, modality="MR").set(number_patiens_mr)
-            dicom_series_total.labels(trial_short_code=project_name, modality="OT").set(number_patiens_ot)
-            dicom_series_total.labels(trial_short_code=project_name, modality="SEG").set(number_patiens_seg)
+            dicom_series_total.labels(trial_short_code=project_name, modality="CT").set(number_series_ct)
+            dicom_series_total.labels(trial_short_code=project_name, modality="MR").set(number_series_mr)
+            dicom_series_total.labels(trial_short_code=project_name, modality="OT").set(number_series_ot)
+            dicom_series_total.labels(trial_short_code=project_name, modality="SEG").set(number_series_seg)
 
         system_load_24h_percent = MonitoringService.query_prom(
             query="100-(avg(rate(node_cpu_seconds_total{job='Node-Exporter',mode='idle'}[24h]))*100)",

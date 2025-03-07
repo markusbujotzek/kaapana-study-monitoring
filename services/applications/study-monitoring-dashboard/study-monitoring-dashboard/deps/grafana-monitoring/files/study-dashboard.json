@@ -244,8 +244,8 @@
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 7,
+        "h": 9,
+        "w": 5,
         "x": 8,
         "y": 0
       },
@@ -308,6 +308,170 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "{__name__=\"dicom_series_manufacturer\", instance=\"local\", job=\"Local Instance\", manufacturer=\"Kaapana\", trial_short_code=\"admin\"}": {
+                  "index": 0,
+                  "text": "Kaapana"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 5,
+        "x": 13,
+        "y": 0
+      },
+      "id": 23,
+      "options": {
+        "displayLabels": [
+          "value",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.1",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "dicom_series_manufacturer{job=\"$component\", instance=~\"$site_instance\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "{{manufacturer}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "DICOM Manufacturer Distribution",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P62313C44B5F653BF"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "{__name__=\"dicom_series_manufacturer\", instance=\"local\", job=\"Local Instance\", manufacturer=\"Kaapana\", trial_short_code=\"admin\"}": {
+                  "index": 0,
+                  "text": "Kaapana"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 24,
+      "options": {
+        "displayLabels": [
+          "value",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.1",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "dicom_series_bodypartexamined{job=\"$component\", instance=~\"$site_instance\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "{{body_part_examined}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "DICOM Body Part Examined Distribution",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P62313C44B5F653BF"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "continuous-RdYlGr"
           },
           "decimals": 0,
@@ -340,10 +504,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 3,
-        "x": 15,
-        "y": 0
+        "x": 8,
+        "y": 9
       },
       "id": 22,
       "options": {
@@ -428,10 +592,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 3,
-        "x": 18,
-        "y": 0
+        "x": 11,
+        "y": 9
       },
       "id": 17,
       "options": {
@@ -516,10 +680,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 3,
-        "x": 21,
-        "y": 0
+        "x": 14,
+        "y": 9
       },
       "id": 11,
       "options": {
@@ -625,10 +789,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 16,
-        "x": 8,
-        "y": 8
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 9
       },
       "id": 10,
       "options": {
