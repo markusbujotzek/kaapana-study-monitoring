@@ -370,7 +370,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "dicom_series_manufacturer{job=\"$component\", instance=~\"$site_instance\"}",
+          "expr": "sum by(manufacturer) (dicom_series_manufacturer{job=\"$component\", instance=~\"$site_instance\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{manufacturer}}",
@@ -452,7 +452,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "dicom_series_bodypartexamined{job=\"$component\", instance=~\"$site_instance\"}",
+          "expr": "sum by(body_part_examined) (dicom_series_bodypartexamined{job=\"$component\", instance=~\"$site_instance\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{body_part_examined}}",
