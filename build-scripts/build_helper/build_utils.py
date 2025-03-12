@@ -76,40 +76,45 @@ class BuildUtils:
         requested_repo = Repo(repo_dir)
         assert not requested_repo.bare
 
-        if "modules" in requested_repo.common_dir:
-            repo_name = basename(requested_repo.working_dir)
-            requested_repo = [
-                Repo(x)
-                for x in Repo(dirname(repo_dir)).submodules
-                if x.name == repo_name
-            ]
-            assert len(requested_repo) == 1
-            requested_repo = requested_repo[0]
-            last_commit = requested_repo.head.commit
-            last_commit_timestamp = (
-                last_commit.committed_datetime.astimezone()
-                .replace(microsecond=0)
-                .isoformat()
-            )
-            build_version = requested_repo.git.describe()
-            build_branch = requested_repo.git.branch()
-            if "\n" in build_branch:
-                build_branch = build_branch.split("\n")[1].strip()
-            # version_check = semver.VersionInfo.parse(build_version)
-        else:
-            last_commit = requested_repo.head.commit
-            last_commit_timestamp = (
-                last_commit.committed_datetime.astimezone()
-                .replace(microsecond=0)
-                .isoformat()
-            )
-            build_version = requested_repo.git.describe()
-            try:
-                build_branch = requested_repo.active_branch.name.split("/")[-1]
-            except TypeError as e:
-                # detached HEAD
-                build_branch = "DETACHED-HEAD"
-            version_check = semver.VersionInfo.parse(build_version)
+        # if "modules" in requested_repo.common_dir:
+        #     print(f"With Modules in {requested_repo=}")
+        #     repo_name = basename(requested_repo.working_dir)
+        #     print(f"{repo_name=}")
+        #     print(f"{repo_dir=}")
+        #     print(f"{Repo(dirname(repo_dir))=}")
+        #     requested_repo = [
+        #         Repo(x)
+        #         for x in Repo(dirname(repo_dir)).submodules
+        #         if x.name == repo_name
+        #     ]
+        #     print(f"{requested_repo=}")
+        #     assert len(requested_repo) == 1
+        #     requested_repo = requested_repo[0]
+        #     last_commit = requested_repo.head.commit
+        #     last_commit_timestamp = (
+        #         last_commit.committed_datetime.astimezone()
+        #         .replace(microsecond=0)
+        #         .isoformat()
+        #     )
+        #     build_version = requested_repo.git.describe()
+        #     build_branch = requested_repo.git.branch()
+        #     if "\n" in build_branch:
+        #         build_branch = build_branch.split("\n")[1].strip()
+        #     # version_check = semver.VersionInfo.parse(build_version)
+        # else:
+        last_commit = requested_repo.head.commit
+        last_commit_timestamp = (
+            last_commit.committed_datetime.astimezone()
+            .replace(microsecond=0)
+            .isoformat()
+        )
+        build_version = requested_repo.git.describe()
+        try:
+            build_branch = requested_repo.active_branch.name.split("/")[-1]
+        except TypeError as e:
+            # detached HEAD
+            build_branch = "DETACHED-HEAD"
+        version_check = semver.VersionInfo.parse(build_version)
 
         return build_version, build_branch, last_commit, last_commit_timestamp
 
